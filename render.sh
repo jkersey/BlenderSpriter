@@ -1,0 +1,1 @@
+/c/Program\ Files/Blender\ Foundation/Blender/blender.exe ./blend_files/radiant_girl10.blend --background --python RenderScript.py # | grep "\*\*"
