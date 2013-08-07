@@ -1,10 +1,8 @@
-<project name="JSGameTemplate" default="build">
-
+<project name="BlenderSpriter" default="build">
     <target name="build">
         <exec executable="c:/Program Files/Blender Foundation/Blender/blender.exe">
             <arg line="--background" />
             <arg line="--python RenderScript.py"/>
         </exec>
     </target>
-
 </project>
