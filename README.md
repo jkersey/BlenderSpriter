@@ -4,7 +4,7 @@ BlenderSpriter (alpha 2)
 Homepage/Screenshots:
 ---------------------
 
-(http://jameskersey.com/BlenderSpriter)
+[http://jameskersey.com/BlenderSpriter](http://jameskersey.com/BlenderSpriter)
 
 
 Description:
