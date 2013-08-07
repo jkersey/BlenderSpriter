@@ -24,6 +24,7 @@ I'm running this with the 2.68a version of Blender and the included Python on Wi
 The config file has options for output path, anti-aliasing, and frame skipping
 
 What you'll need to do in the .blend file:
+
 * Create an empty object called "Grip"
 * Set Grip as the parent of your camera
 * Set Grip as the parent of all lamps
