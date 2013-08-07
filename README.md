@@ -32,6 +32,12 @@ Running:
 
 There is an ant script and .sh script included as well
 
+I also had to do this:
+
+    set PYTHONPATH=%PYTHONPATH%;.
+
+To get it to see the Stitcher.py file.
+
 
 
 Output:
@@ -44,3 +50,5 @@ The output goes into the output directory, split into an images directory for th
 Known Issues:
 -------------
 [ ] It only lets you fill one 1024x1024 page per .blend file
+
+(Windows) I tried using an external version of Python 3.3, but I got the [cannot import name: MAXREPEAT](http://bugs.python.org/issue18050) exception and couldn't get past it.
