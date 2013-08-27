@@ -40,7 +40,7 @@ class Stitcher():
             return step_count - 1
 
     def save(self):
-        self.sheet.save('build/images/' + self.animation_name + '.png', 'PNG')
+        self.sheet.save('output/images/' + self.animation_name + '.png', 'PNG')
         self.code_gen.save()
 
 

@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c22913b7-fe89-4ec7-b56f-0fb034fe451d" name="Default" comment="" />
+    <list default="true" id="c22913b7-fe89-4ec7-b56f-0fb034fe451d" name="Default" comment="">
+      <change type="DELETED" beforePath="C:\Users\jkersey\Projects\BlenderSpriter\blend_files\player.blend1" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\jkersey\Projects\BlenderSpriter\blend_files\player.blend2" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/PILTest.iml" afterPath="$PROJECT_DIR$/.idea/PILTest.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/images/player.png" afterPath="$PROJECT_DIR$/build/images/player.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RenderScript.py" afterPath="$PROJECT_DIR$/RenderScript.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Stitcher.py" afterPath="$PROJECT_DIR$/Stitcher.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/js/player.js" afterPath="$PROJECT_DIR$/build/js/player.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="PILTest.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/PIL_Test.py" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1372432955571" ignored="false" />
     <file path="/RenderScript.py" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1373148836264" ignored="false" />
     <file path="/StitchSpriteSheet.py" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1372457526609" ignored="false" />
-    <file path="/config.ini" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1373033984771" ignored="false" />
+    <file path="/config.ini" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1375896297336" ignored="false" />
     <file path="/render.sh" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1373034866366" ignored="false" />
     <file path="/something.js" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1372873014376" ignored="false" />
     <file path="/player.cfg" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1373167512346" ignored="false" />
-    <file path="/Stitcher.py" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1373049603024" ignored="false" />
+    <file path="/Stitcher.py" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1375911978517" ignored="false" />
     <file path="/CodeGenerator.py" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1373063548993" ignored="false" />
     <file path="/buid.xml" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1373136028589" ignored="false" />
     <file path="/build.xml" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1373148662138" ignored="false" />
+    <file path="/README.md" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1375907971891" ignored="false" />
+    <file path="/Dummy.txt" changelist="c22913b7-fe89-4ec7-b56f-0fb034fe451d" time="1377119243299" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,28 +46,44 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="RenderScript.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="RenderScript.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/RenderScript.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="0" selection-start="1028" selection-end="1028" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
+            <state line="15" column="0" selection-start="371" selection-end="371" vertical-scroll-proportion="0.030195381">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="player.png" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Stitcher.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Stitcher.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="42" column="31" selection-start="1554" selection-end="1554" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="player.png" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build/images/player.png">
           <provider selected="true" editor-type-id="images">
             <state />
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="player.cfg" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/animation_config/player.cfg">
+      <file leaf-file-name="build.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="0" selection-start="9" selection-end="9" vertical-scroll-proportion="0.0">
+            <state line="8" column="0" selection-start="290" selection-end="290" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="render.sh" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/render.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="116" selection-start="0" selection-end="130" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -77,6 +105,14 @@
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitLogSettings">
+    <option name="myDateState">
+      <MyDateState />
+    </option>
+  </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
@@ -84,25 +120,26 @@
         <option value="$PROJECT_DIR$/StitchSpriteSheet.py" />
         <option value="$PROJECT_DIR$/something.js" />
         <option value="$PROJECT_DIR$/player.cfg" />
-        <option value="$PROJECT_DIR$/config.ini" />
         <option value="$PROJECT_DIR$/render.sh" />
         <option value="$PROJECT_DIR$/__init__.py" />
-        <option value="$PROJECT_DIR$/Stitcher.py" />
         <option value="$PROJECT_DIR$/buid.xml" />
         <option value="$PROJECT_DIR$/build.xml" />
         <option value="$PROJECT_DIR$/CodeGenerator.py" />
         <option value="$PROJECT_DIR$/animation_config/player.cfg" />
+        <option value="$PROJECT_DIR$/config.ini" />
+        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/RenderScript.py" />
+        <option value="$PROJECT_DIR$/Stitcher.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1296" />
-    <option name="height" value="776" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
@@ -128,7 +165,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -143,58 +179,13 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="PILTest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PILTest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PILTest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="build" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PILTest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PILTest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="build" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="images" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PILTest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PILTest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="animation_config" />
+              <option name="myItemId" value="BlenderSpriter" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -203,6 +194,7 @@
     <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="com.jetbrains.python.configuration.PythonSdkConfigurable" />
     <property name="last_opened_file_path" value="C:/Program Files/Blender Foundation/Blender/doc/python_api/pypredef" />
+    <property name="FullScreen" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
   </component>
@@ -335,14 +327,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1296" height="776" extended-state="6" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2617504" sideWeight="0.6704362" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27045456" sideWeight="0.6704362" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32956383" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
@@ -418,12 +410,36 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/CodeGenerator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="0" selection-start="779" selection-end="779" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/RenderScript.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build/images/player.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CodeGenerator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="0" selection-start="779" selection-end="779" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RenderScript.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
@@ -434,33 +450,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Stitcher.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="48" selection-start="1346" selection-end="1346" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="23" selection-start="222" selection-end="222" vertical-scroll-proportion="0.13490725">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/render.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="116" selection-start="0" selection-end="130" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="16" selection-start="160" selection-end="160" vertical-scroll-proportion="0.29679596">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/CodeGenerator.py">
@@ -472,23 +464,50 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/animation_config/player.cfg">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="9" selection-end="9" vertical-scroll-proportion="0.0">
+        <state line="1" column="0" selection-start="9" selection-end="9" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build/images/player.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="0" selection-start="290" selection-end="290" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/render.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="116" selection-start="0" selection-end="130" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="0" selection-start="916" selection-end="916" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="0" selection-start="105" selection-end="105" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Stitcher.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="31" selection-start="1554" selection-end="1554" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/RenderScript.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="0" selection-start="1028" selection-end="1028" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
+        <state line="15" column="0" selection-start="371" selection-end="371" vertical-scroll-proportion="0.030195381">
+          <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build/images/player.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
       </provider>
     </entry>
   </component>

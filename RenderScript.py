@@ -14,7 +14,7 @@ class RenderScript():
 
     def __init__(self):
 
-        bpy.ops.wm.open_mainfile(filepath="blend_files/player.blend")
+        bpy.ops.wm.open_mainfile(filepath="blend_files/player2.blend")
 
         # has to be saved in the blender file
         # check to make sure it's not set to the default
