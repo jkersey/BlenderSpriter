@@ -4,7 +4,7 @@ BlenderSpriter (alpha 2)
 Homepage/Screenshots:
 ---------------------
 
-[https://jameskersey.com/pages/blenderspriter.html](https://jameskersey.com/blenderspriter.html)
+[https://jameskersey.com/pages/blenderspriter.html](https://jameskersey.com/pages/blenderspriter.html)
 
 
 Description:
@@ -69,5 +69,6 @@ Further Reading:
 ----------------
 
 [http://www.blender.org/documentation/blender_python_api_2_61_0/info_tips_and_tricks.html](http://www.blender.org/documentation/blender_python_api_2_61_0/info_tips_and_tricks.html)
+
 
 
