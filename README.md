@@ -1,6 +1,8 @@
 # BlenderSpriter
 
-Render and compile sprite sheets for Godot, Phaser, Unity, and the as-yet-unavailable Adventur game engine. Renders Blender models to per-frame PNGs, then packs them into per-skin sprite sheets with Aseprite-compatible JSON metadata.
+Render and compile sprite sheets for the as-yet-unavailable Adventur game engine. Renders Blender models to per-frame PNGs, then packs them into per-skin sprite sheets with Aseprite-compatible JSON metadata.
+
+Working on plugins for Godot, Phaser, and Unity. They're just .json files with coordinates for .png images, how hard can it be? 
 
 ---
 
@@ -56,8 +58,6 @@ python compiler.py
 ```
 
 Reads rendered frames from the path set in `config.ini` (`compiler.input_path`) and writes one `{skin}.png` + `{skin}.json` pair per skin to `compiler.output_path`.
-
-The JSON is in Aseprite hash format with `frameTags` per animation+direction (e.g. `idle_north`, `walk_south`). Compatible with Godot's Aseprite importer, Phaser's `Loader.aseprite()`, and Unity's Aseprite importer.
 
 #### Legacy format
 

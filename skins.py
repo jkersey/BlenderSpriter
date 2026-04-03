@@ -2,6 +2,7 @@
 PLAYER = 1
 NPC = 2
 CRYO_BED = 3
+MINITRON = 4
 
 IDLE = 1
 WALK = 2
@@ -30,6 +31,7 @@ skin_encoding = {
     'npc_default_default': PLAYER,
     'npc_default_yellow': NPC,
     'container_cryo_default': CRYO_BED,
+    'npc_default_default_minitron': MINITRON,
 }
 
 animation_encoding = {
