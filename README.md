@@ -1,4 +1,4 @@
-# BlenderSpriter
+# Spriter
 
 Render and compile sprite sheets for the as-yet-unavailable Adventur game engine. Renders Blender models to per-frame PNGs, then packs them into per-skin sprite sheets with Aseprite-compatible JSON metadata.
 
