@@ -1,6 +1,6 @@
-# Adventur Scripts
+# BlenderSpriter
 
-Render and compile sprite sheets for the Adventur game engine. Renders Blender models to per-frame PNGs, then packs them into per-skin sprite sheets with Aseprite-compatible JSON metadata.
+Render and compile sprite sheets for Godot, Phaser, Unity, and the as-yet-unavailable Adventur game engine. Renders Blender models to per-frame PNGs, then packs them into per-skin sprite sheets with Aseprite-compatible JSON metadata.
 
 ---
 
@@ -8,16 +8,16 @@ Render and compile sprite sheets for the Adventur game engine. Renders Blender m
 
 | Script | Purpose |
 |---|---|
-| `render.sh` | Render all `.blend` files to PNG frames via Blender |
+| `render.sh` | Render all `.blend` files to PNG frames via Blender. Skins are external files, if it finds more than one it'll render the model with them too! |
 | `compiler.py` | Pack rendered frames into sprite sheets + Aseprite JSON |
 | `serve.py` | Local dev server for previewing renders and triggering builds |
-| `wall_compiler.py` | Legacy wall sprite compiler |
+| `wall_compiler.py` | Wall sprite compiler, still in progress but the math works. |
 
 ---
 
 ## Requirements
 
-- [Blender](https://www.blender.org/) 4.x (path configured in `render.sh`)
+- [Blender](https://www.blender.org/) 2 - 4.x, your .blend file may need to be in sync with your Blender version(path configured in `render.sh`)
 - Python 3.x with Pillow: `pip install Pillow`
 
 ---
@@ -90,7 +90,7 @@ Static files (including `index.html`) are served from the scripts directory.
 
 ## Configuration
 
-`config.ini` is not committed to git. Create one locally:
+Still a little primitive, move the directions you're not interested in to the unused section. This is what the camera uses to render the model from different angles. Fallout 1 & 2 wouldn't have needed north or south, for example. I've left these formulas out in the open to give you the option of tweaking them if you need to.
 
 ```ini
 [compiler]
@@ -110,7 +110,7 @@ northeast = 3 * pi / 4
 [unused]
 ```
 
-Directions listed under `[unused]` are skipped during rendering. The dev server's toggle UI moves directions between `[directions]` and `[unused]`.
+UI note: Directions listed under `[unused]` are skipped during rendering. The dev server's toggle UI moves directions between `[directions]` and `[unused]`.
 
 ---
 
