@@ -1,130 +1,121 @@
-# BlenderSpriter
+# Adventur Scripts
 
-Generate sprite sheets from Blender 3D animation files — one sheet per action, one sheet per skin.
-
-> Featured on [BlenderNation](https://www.blendernation.com/2013/08/29/blenderspriter/). Works with Blender 4.x.
+Render and compile sprite sheets for the Adventur game engine. Renders Blender models to per-frame PNGs, then packs them into per-skin sprite sheets with Aseprite-compatible JSON metadata.
 
 ---
 
-## What it does
+## Tools
 
-BlenderSpriter renders every action in a `.blend` file into a single sprite sheet, with frames laid out in row-major order. If you define multiple skins (texture swaps), it generates a separate sheet for each one — same layout, different look.
-
-Output includes:
-- PNG sprite sheet per action (and per skin)
-- Aseprite-compatible JSON metadata with frame coordinates and animation tags
-
-This makes it straightforward to drop the output directly into Godot, Phaser, Unity (via the Aseprite importer), or any engine that reads Aseprite's JSON format.
+| Script | Purpose |
+|---|---|
+| `render.sh` | Render all `.blend` files to PNG frames via Blender |
+| `compiler.py` | Pack rendered frames into sprite sheets + Aseprite JSON |
+| `serve.py` | Local dev server for previewing renders and triggering builds |
+| `wall_compiler.py` | Legacy wall sprite compiler |
 
 ---
 
 ## Requirements
 
-- [Blender](https://www.blender.org/) 2.x – 4.x
-- No additional Python dependencies — uses Blender's built-in Python environment
+- [Blender](https://www.blender.org/) 4.x (path configured in `render.sh`)
+- Python 3.x with Pillow: `pip install Pillow`
 
 ---
 
-## Usage
+## Workflow
+
+### 1. Render
 
 ```bash
-blender --background your_character.blend --python blenderspriter.py -- \
-  --output ./sprites \
-  --width 64 \
-  --height 64
+./render.sh
 ```
 
-### With skins
+Runs Blender in background mode against each `.blend` file listed in `render.sh`. Output lands in `render/` with this structure:
+
+```
+render/
+  {skin}/
+    {station}/
+      {animation}/
+        {direction}/
+          frame_0000.png
+          frame_0001.png
+          ...
+```
+
+Blender executable path is set at the top of `render.sh`:
+
+```sh
+BLENDER_EXE="/opt/blender4/blender"
+```
+
+### 2. Compile
 
 ```bash
-blender --background your_character.blend --python blenderspriter.py -- \
-  --output ./sprites \
-  --width 64 \
-  --height 64 \
-  --skins skin_default skin_red skin_blue
+python compiler.py
 ```
 
-This produces one sprite sheet per skin per action:
+Reads rendered frames from the path set in `config.ini` (`compiler.input_path`) and writes one `{skin}.png` + `{skin}.json` pair per skin to `compiler.output_path`.
 
-```
-sprites/
-  walk_skin_default.png
-  walk_skin_default.json
-  walk_skin_red.png
-  walk_skin_red.json
-  idle_skin_default.png
-  idle_skin_default.json
-  ...
+The JSON is in Aseprite hash format with `frameTags` per animation+direction (e.g. `idle_north`, `walk_south`). Compatible with Godot's Aseprite importer, Phaser's `Loader.aseprite()`, and Unity's Aseprite importer.
+
+#### Legacy format
+
+```bash
+python compiler.py --format json
 ```
 
----
+Produces `spritesheet_N.png` + `file.json` + `file.bin` + `file.csv` (old packed-sheet format).
 
-## Aseprite JSON output
+### 3. Preview with the dev server
 
-Each sprite sheet is accompanied by a `.json` file compatible with Aseprite's array export format. This includes:
-
-- Frame coordinates (`x`, `y`, `w`, `h`) for every frame
-- Frame duration derived from the Blender scene FPS
-- `frameTags` mapping each Blender action name to its frame range
-
-Example:
-
-```json
-{
-  "frames": [
-    {
-      "filename": "walk_00.png",
-      "frame": { "x": 0, "y": 0, "w": 64, "h": 64 },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 64 },
-      "sourceSize": { "w": 64, "h": 64 },
-      "duration": 100
-    }
-  ],
-  "meta": {
-    "app": "https://www.aseprite.org/",
-    "version": "1.2.25",
-    "image": "walk_skin_default.png",
-    "format": "RGBA8888",
-    "size": { "w": 512, "h": 64 },
-    "scale": "1",
-    "frameTags": [
-      { "name": "walk", "from": 0, "to": 7, "direction": "forward" }
-    ],
-    "slices": []
-  }
-}
+```bash
+python serve.py
 ```
 
-Godot's Aseprite importer, Phaser's `Loader.aseprite()`, and Unity's Aseprite importer (2021.2+) all read this format directly.
+Starts a local server at **http://localhost:8080/index.html**. Open that URL in a browser to preview renders and trigger builds from the UI.
+
+#### API endpoints
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/api/renders` | Scan `render/` and return sprite inventory by skin/station/animation/direction |
+| GET | `/api/config` | Return active and inactive directions from `config.ini` |
+| POST | `/api/config/toggle` | Toggle a direction between active and inactive |
+| POST | `/api/render` | Trigger `render.sh` and return stdout/stderr |
+
+Static files (including `index.html`) are served from the scripts directory.
 
 ---
 
-## Workflow example
+## Configuration
 
-1. Build and rig your character in Blender
-2. Create actions (`walk`, `run`, `idle`, `attack`, etc.) in the Action Editor
-3. Set up skin materials as needed
-4. Run BlenderSpriter from the command line
-5. Import the PNG + JSON directly into your engine
+`config.ini` is not committed to git. Create one locally:
+
+```ini
+[compiler]
+input_path = ./render
+output_path = ./compiled
+
+[directions]
+north = 2 * pi / 4
+south = 6 * pi / 4
+east = pi
+west = 0.0
+northwest = pi / 4
+southwest = 7 * pi / 4
+southeast = 5 * pi / 4
+northeast = 3 * pi / 4
+
+[unused]
+```
+
+Directions listed under `[unused]` are skipped during rendering. The dev server's toggle UI moves directions between `[directions]` and `[unused]`.
 
 ---
 
-## Tips
+## Tests
 
-- Action names become the `frameTags` names in the JSON — name them clearly (`walk`, `run_fast`, `jump_start`)
-- Frame size should match your target tile size in-engine
-- Skins are swapped at render time, so any material or texture can be used
-
----
-
-## Background
-
-BlenderSpriter started in 2013 as a weekend script to avoid manually stitching rendered frames together. It's been quietly used and forked since then and still runs on current Blender without modification.
-
----
-
-## License
-
-MIT
+```bash
+python -m pytest tests/ -v
+```
