@@ -1,9 +1,6 @@
 __pycache__/
 *.pyc
-compiled/
 render/
 log.txt
-config.ini
-D:\\Adventur\\
 *.blend1
 *_Conflict*
