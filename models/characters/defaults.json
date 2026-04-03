@@ -1,0 +1,8 @@
+{
+    "directions": [
+        "northeast",
+        "northwest",
+        "southeast",
+        "southwest"
+        ]
+}

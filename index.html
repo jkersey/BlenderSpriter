@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Render Preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: system-ui, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  header {
+    padding: 10px 16px;
+    background: #16213e;
+    border-bottom: 1px solid #0f3460;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  header h1 { font-size: 1rem; color: #a0c4ff; white-space: nowrap; }
+
+  .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  select, input[type=range], button {
+    background: #0f3460;
+    color: #e0e0e0;
+    border: 1px solid #1a4a7a;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  select:focus, button:focus { outline: 2px solid #a0c4ff; }
+
+  button {
+    padding: 4px 14px;
+    min-width: 60px;
+    background: #1a4a7a;
+  }
+
+  button:hover { background: #2a5a9a; }
+
+  label { font-size: 0.8rem; color: #8aafc8; }
+
+  .fps-group { display: flex; align-items: center; gap: 6px; }
+  #fps-display { font-size: 0.8rem; color: #8aafc8; min-width: 40px; }
+
+  main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    cursor: crosshair;
+  }
+
+  #frame-display {
+    max-width: 100%;
+    max-height: 100%;
+    image-rendering: pixelated;
+    object-fit: contain;
+    transition: transform 0.1s;
+  }
+
+  #frame-display.doubled {
+    transform: scale(2);
+    max-width: 50%;
+    max-height: 50%;
+  }
+
+  #placeholder {
+    color: #4a6a8a;
+    font-size: 1.1rem;
+    text-align: center;
+    line-height: 1.8;
+  }
+
+  footer {
+    padding: 6px 16px;
+    background: #16213e;
+    border-top: 1px solid #0f3460;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.8rem;
+    color: #6a8aa8;
+  }
+
+  #frame-counter { min-width: 80px; }
+
+  #scrubber { flex: 1; max-width: 400px; }
+
+  .hidden { display: none !important; }
+
+  #content {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+  #sidebar {
+    width: 170px;
+    flex-shrink: 0;
+    background: #16213e;
+    border-right: 1px solid #0f3460;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+    overflow-y: auto;
+  }
+
+  #sidebar h2 {
+    font-size: 0.75rem;
+    color: #8aafc8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .compass {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+
+  .compass .gap { visibility: hidden; }
+
+  .dir-btn {
+    padding: 4px 2px;
+    font-size: 0.75rem;
+    min-width: unset;
+    background: #0f3460;
+    border-color: #1a4a7a;
+    opacity: 0.45;
+  }
+
+  .dir-btn.active {
+    background: #1a4a7a;
+    border-color: #4a8aca;
+    opacity: 1;
+  }
+
+  #btn-render {
+    width: 100%;
+    padding: 6px;
+    background: #2a4a2a;
+    border-color: #4a8a4a;
+    color: #a0e0a0;
+  }
+
+  #btn-render:hover:not(:disabled) { background: #3a6a3a; }
+  #btn-render:disabled { opacity: 0.5; cursor: default; }
+
+  #skin-thumb {
+    width: 100%;
+    image-rendering: pixelated;
+    object-fit: contain;
+    border: 1px solid #0f3460;
+    border-radius: 4px;
+    background: #0a0a1a;
+  }
+
+  #render-log {
+    font-family: monospace;
+    font-size: 0.7rem;
+    background: #0a0a1a;
+    color: #a0e0a0;
+    border: 1px solid #0f3460;
+    border-radius: 4px;
+    padding: 6px;
+    height: 160px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Render Preview</h1>
+  <div class="controls">
+    <select id="sel-model"><option value="">— model —</option></select>
+    <select id="sel-action" class="hidden"><option value="">— action —</option></select>
+    <select id="sel-direction" class="hidden"><option value="">— direction —</option></select>
+    <button id="btn-play">Play</button>
+    <label style="display:flex;align-items:center;gap:5px;cursor:pointer">
+      <input type="checkbox" id="chk-double"> 2×
+    </label>
+    <label style="display:flex;align-items:center;gap:5px;cursor:pointer">
+      <input type="checkbox" id="chk-follow-mouse" checked> follow mouse
+    </label>
+    <div class="fps-group">
+      <label for="fps-slider">FPS</label>
+      <input id="fps-slider" type="range" min="1" max="24" value="8" style="width:80px">
+      <span id="fps-display">8</span>
+    </div>
+  </div>
+</header>
+
+<div id="content">
+<aside id="sidebar">
+  <img id="skin-thumb" class="hidden" alt="skin">
+  <h2>Directions</h2>
+  <div class="compass">
+    <button class="dir-btn" data-dir="northwest">NW</button>
+    <button class="dir-btn" data-dir="north">N</button>
+    <button class="dir-btn" data-dir="northeast">NE</button>
+    <button class="dir-btn" data-dir="west">W</button>
+    <span class="gap"></span>
+    <button class="dir-btn" data-dir="east">E</button>
+    <button class="dir-btn" data-dir="southwest">SW</button>
+    <button class="dir-btn" data-dir="south">S</button>
+    <button class="dir-btn" data-dir="southeast">SE</button>
+  </div>
+
+  <h2>Render</h2>
+  <button id="btn-render">Run Render</button>
+  <div id="render-log"></div>
+</aside>
+
+<main>
+  <img id="frame-display" class="hidden" alt="frame">
+  <div id="placeholder">Select a model above to begin.</div>
+</main>
+</div>
+
+<footer>
+  <span id="frame-counter">Frame — / —</span>
+  <input id="scrubber" type="range" min="0" value="0" disabled>
+  <span id="path-display"></span>
+</footer>
+
+<script>
+  let renders = {};
+  let frames = [];       // array of relative paths for the current selection
+  let currentFrame = 0;
+  let timer = null;
+  let playing = false;
+
+  // ── DOM refs ────────────────────────────────────────────────────────────────
+  const chkDouble = document.getElementById('chk-double');
+  const selModel     = document.getElementById('sel-model');
+  const selAction    = document.getElementById('sel-action');
+  const selDirection = document.getElementById('sel-direction');
+  const btnPlay      = document.getElementById('btn-play');
+  const fpsSlider    = document.getElementById('fps-slider');
+  const fpsDisplay   = document.getElementById('fps-display');
+  const img          = document.getElementById('frame-display');
+  const placeholder  = document.getElementById('placeholder');
+  const frameCounter = document.getElementById('frame-counter');
+  const scrubber     = document.getElementById('scrubber');
+  const pathDisplay  = document.getElementById('path-display');
+
+  // ── DOM refs (sidebar) ───────────────────────────────────────────────────────
+  const btnRender  = document.getElementById('btn-render');
+  const renderLog  = document.getElementById('render-log');
+  const dirButtons = document.querySelectorAll('.dir-btn');
+  const skinThumb  = document.getElementById('skin-thumb');
+
+  // ── Bootstrap ───────────────────────────────────────────────────────────────
+  fetch('/api/config')
+    .then(r => r.json())
+    .then(cfg => applyConfig(cfg));
+
+  fetch('/api/renders')
+    .then(r => r.json())
+    .then(data => {
+      renders = data;
+      for (const name of Object.keys(data)) {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        selModel.appendChild(opt);
+      }
+    })
+    .catch(() => {
+      placeholder.textContent = 'Could not reach /api/renders.\nRun: python3 serve.py';
+    });
+
+  // ── Selection handlers ───────────────────────────────────────────────────────
+  selModel.addEventListener('change', () => {
+    const entry = renders[selModel.value];
+    resetSelectors();
+
+    if (!entry) {
+      skinThumb.classList.add('hidden');
+      return;
+    }
+
+    if (entry.skin) {
+      skinThumb.src = entry.skin;
+      skinThumb.classList.remove('hidden');
+    } else {
+      skinThumb.classList.add('hidden');
+    }
+
+    if (entry.type === 'static') {
+      loadFrames(entry.frames.map(f => `render/${selModel.value}/${f}`));
+    } else {
+      // character: pick first station (currently always 'Grip')
+      const station = Object.keys(entry.stations)[0];
+      populateSelect(selAction, Object.keys(entry.stations[station]), 'walk');
+      selAction.classList.remove('hidden');
+    }
+  });
+
+  selAction.addEventListener('change', () => {
+    const entry = renders[selModel.value];
+    if (!entry || entry.type !== 'character') return;
+
+    const station = Object.keys(entry.stations)[0];
+    const dirs = Object.keys(entry.stations[station][selAction.value] || {});
+    populateSelect(selDirection, dirs, 'southeast');
+    selDirection.classList.remove('hidden');
+  });
+
+  selDirection.addEventListener('change', () => {
+    const entry = renders[selModel.value];
+    if (!entry || entry.type !== 'character') return;
+
+    const station = Object.keys(entry.stations)[0];
+    const action  = selAction.value;
+    const dir     = selDirection.value;
+    if (!action || !dir) return;
+
+    const fileNames = entry.stations[station][action][dir] || [];
+    const base = `render/${selModel.value}/${station}/${action}/${dir}`;
+    loadFrames(fileNames.map(f => `${base}/${f}`));
+  });
+
+  // ── Playback ────────────────────────────────────────────────────────────────
+  btnPlay.addEventListener('click', togglePlay);
+
+  fpsSlider.addEventListener('input', () => {
+    fpsDisplay.textContent = fpsSlider.value;
+    if (playing) { stopTimer(); startTimer(); }
+  });
+
+  chkDouble.addEventListener('change', () => {
+    img.classList.toggle('doubled', chkDouble.checked);
+  });
+
+  // ── Mouse-tracking direction ─────────────────────────────────────────────────
+  // All 8 compass directions in clockwise order starting from east (atan2 = 0)
+  const ALL_DIRS = ['east','southeast','south','southwest','west','northwest','north','northeast'];
+
+  function dirFromAngle(dx, dy) {
+    const angle = Math.atan2(dy, dx); // -π to π, 0 = east
+    const idx = ((Math.round(angle / (Math.PI / 4)) % 8) + 8) % 8;
+    return ALL_DIRS[idx];
+  }
+
+  function nearestAvailable(desired, available) {
+    if (available.includes(desired)) return desired;
+    const di = ALL_DIRS.indexOf(desired);
+    let best = null, bestDist = Infinity;
+    for (const dir of available) {
+      const diff = Math.abs(ALL_DIRS.indexOf(dir) - di);
+      const dist = Math.min(diff, 8 - diff);
+      if (dist < bestDist) { bestDist = dist; best = dir; }
+    }
+    return best;
+  }
+
+  document.querySelector('main').addEventListener('mousemove', (e) => {
+    if (!document.getElementById('chk-follow-mouse').checked) return;
+    const entry = renders[selModel.value];
+    if (!entry || entry.type !== 'character' || !selAction.value) return;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const dx = e.clientX - (rect.left + rect.width  / 2);
+    const dy = e.clientY - (rect.top  + rect.height / 2);
+
+    const available = Array.from(selDirection.options).map(o => o.value).filter(Boolean);
+    const dir = nearestAvailable(dirFromAngle(dx, dy), available);
+
+    if (dir && dir !== selDirection.value) {
+      selDirection.value = dir;
+      selDirection.dispatchEvent(new Event('change'));
+    }
+  });
+
+  scrubber.addEventListener('input', () => {
+    stopTimer();
+    playing = false;
+    btnPlay.textContent = 'Play';
+    showFrame(parseInt(scrubber.value));
+  });
+
+  function togglePlay() {
+    if (!frames.length) return;
+    playing = !playing;
+    btnPlay.textContent = playing ? 'Pause' : 'Play';
+    playing ? startTimer() : stopTimer();
+  }
+
+  function startTimer() {
+    const ms = Math.round(1000 / parseInt(fpsSlider.value));
+    timer = setInterval(advance, ms);
+  }
+
+  function stopTimer() {
+    clearInterval(timer);
+    timer = null;
+  }
+
+  function advance() {
+    showFrame((currentFrame + 1) % frames.length);
+  }
+
+  // ── Frame rendering ──────────────────────────────────────────────────────────
+  function loadFrames(paths) {
+    stopTimer();
+    frames = paths;
+    currentFrame = 0;
+    playing = false;
+    btnPlay.textContent = 'Play';
+
+    scrubber.max   = Math.max(0, frames.length - 1);
+    scrubber.value = 0;
+    scrubber.disabled = frames.length === 0;
+
+    if (frames.length) {
+      showFrame(0);
+      if (frames.length > 1) { playing = true; btnPlay.textContent = 'Pause'; startTimer(); }
+    } else {
+      clearFrames();
+    }
+  }
+
+  function showFrame(index) {
+    currentFrame  = index;
+    scrubber.value = index;
+    const path = frames[index];
+    img.src   = path;
+    img.classList.remove('hidden');
+    placeholder.classList.add('hidden');
+    frameCounter.textContent = `Frame ${index + 1} / ${frames.length}`;
+    pathDisplay.textContent  = path;
+  }
+
+  function clearFrames() {
+    frames = [];
+    img.classList.add('hidden');
+    placeholder.classList.remove('hidden');
+    frameCounter.textContent = 'Frame — / —';
+    pathDisplay.textContent  = '';
+    scrubber.value   = 0;
+    scrubber.disabled = true;
+  }
+
+  function resetSelectors() {
+    stopTimer();
+    clearFrames();
+    playing = false;
+    btnPlay.textContent = 'Play';
+    selAction.classList.add('hidden');
+    selDirection.classList.add('hidden');
+    populateSelect(selAction, []);
+    populateSelect(selDirection, []);
+  }
+
+  // ── Sidebar: direction toggles ───────────────────────────────────────────────
+  function applyConfig(cfg) {
+    const active = Object.keys(cfg.active);
+    dirButtons.forEach(btn => {
+      btn.classList.toggle('active', active.includes(btn.dataset.dir));
+    });
+  }
+
+  dirButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const willBeActive = !btn.classList.contains('active');
+      fetch('/api/config/toggle', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name: btn.dataset.dir, active: willBeActive}),
+      })
+      .then(r => r.json())
+      .then(() => {
+        btn.classList.toggle('active', willBeActive);
+      });
+    });
+  });
+
+  // ── Sidebar: run render ───────────────────────────────────────────────────────
+  btnRender.addEventListener('click', () => {
+    btnRender.disabled = true;
+    btnRender.textContent = 'Rendering…';
+    renderLog.textContent = '';
+
+    fetch('/api/render', {method: 'POST'})
+      .then(r => r.json())
+      .then(result => {
+        renderLog.textContent = (result.stdout + result.stderr).trim()
+          || (result.returncode === 0 ? 'Done.' : `Exit ${result.returncode}`);
+        renderLog.scrollTop = renderLog.scrollHeight;
+        // Refresh render list so new frames appear
+        return fetch('/api/renders').then(r => r.json());
+      })
+      .then(data => { renders = data; })
+      .finally(() => {
+        btnRender.disabled = false;
+        btnRender.textContent = 'Run Render';
+      });
+  });
+
+  function populateSelect(sel, options, preferred = null) {
+    const placeholder = sel.options[0];
+    sel.innerHTML = '';
+    sel.appendChild(placeholder);
+    for (const val of options) {
+      const opt = document.createElement('option');
+      opt.value = val;
+      opt.textContent = val;
+      sel.appendChild(opt);
+    }
+    const pick = (preferred && options.includes(preferred)) ? preferred
+               : options.length === 1 ? options[0]
+               : '';
+    sel.value = pick;
+    if (pick) sel.dispatchEvent(new Event('change'));
+  }
+</script>
+</body>
+</html>
