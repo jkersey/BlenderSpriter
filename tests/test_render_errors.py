@@ -16,7 +16,7 @@ def mock_bpy(monkeypatch):
 def test_check_blender_exits_when_not_on_path():
     """When blender binary isn't on PATH, check_blender() should sys.exit with message."""
     import render
-    with patch("shutil.which", return_value=None):
+    with patch("render.shutil.which", return_value=None):
         with pytest.raises(SystemExit):
             render.check_blender()
 

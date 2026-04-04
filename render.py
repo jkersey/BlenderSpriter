@@ -14,7 +14,13 @@ from configparser import ConfigParser
 
 
 def check_blender():
-    """Verify blender is on PATH. Exit with helpful message if not."""
+    """
+    Verify blender is on PATH. Exit with helpful message if not.
+
+    NOTE: Call this from a launcher script *before* invoking Blender.
+    Do not call from render.py's __main__ block — by the time Blender
+    runs this script, the blender binary is already executing.
+    """
     if shutil.which("blender") is None:
         print("Error: 'blender' not found on PATH.")
         print("Install Blender and make sure it's accessible from the terminal.")
