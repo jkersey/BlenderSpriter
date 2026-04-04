@@ -12,6 +12,7 @@ Working on plugins for Godot, Phaser, and Unity. They're just .json files with c
 
 - [Blender 3.x or 4.x](https://www.blender.org/download/) installed and accessible from the terminal (`blender --version` should work)
 - Python 3.8+
+- Pillow: `pip install Pillow` (required for the compiler step)
 - A `.blend` file with at least one armature-driven animation
 
 ### Setup
@@ -30,7 +31,7 @@ Working on plugins for Godot, Phaser, and Unity. They're just .json files with c
    - `blender_file` — path to your `.blend` file
    - `output_path` under `[output]` — where rendered frames should be saved
    - `output_path` under `[compiler]` — where sprite sheets should be saved
-   - `directions` — angles to render (e.g. `north`, `northeast`, `east`, etc.)
+   - `[directions]` section — each key is a direction name (e.g. `north`, `northeast`); move unused directions to `[unused]` to skip them
 
 3. Render frames from Blender:
    ```bash
@@ -42,7 +43,7 @@ Working on plugins for Godot, Phaser, and Unity. They're just .json files with c
    ```bash
    python compiler.py
    ```
-   Output: a `.json` metadata file and `.png` sprite sheet in your `output_dir`.
+   Output: one `{skin}.json` and `{skin}.png` per skin in your `output_dir` (Aseprite format).
 
 5. Import the output into Godot 4 using the [Godot Spriter Importer](https://github.com/jkersey/godot-spriter-importer) plugin.
 

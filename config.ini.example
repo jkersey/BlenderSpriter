@@ -4,7 +4,7 @@ ignore_actions = Action,ObAction,walkx
 
 [output]
 output_path = ./render
-use_antialiasing = True
+use_antialiasing = True  # currently unused, reserved for future use
 frame_step = 4
 
 [compiler]
