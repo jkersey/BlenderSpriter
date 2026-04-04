@@ -3,12 +3,34 @@ from pathlib import Path
 import bpy
 import os
 import json
+import shutil
+import sys
 
 # "from math import pi" is needed for direction evaluation
 from math import pi
 
 import time
 from configparser import ConfigParser
+
+
+def check_blender():
+    """Verify blender is on PATH. Exit with helpful message if not."""
+    if shutil.which("blender") is None:
+        print("Error: 'blender' not found on PATH.")
+        print("Install Blender and make sure it's accessible from the terminal.")
+        print("Download: https://www.blender.org/download/")
+        sys.exit(1)
+
+
+def load_config(config_path="config.ini"):
+    """Load config file. Exit with helpful message if missing."""
+    if not os.path.exists(config_path):
+        print(f"Error: Config file not found: {config_path}")
+        print("Copy config.ini.example to config.ini and edit it for your project.")
+        sys.exit(1)
+    config = ConfigParser()
+    config.read(config_path)
+    return config
 
 # to run this:
 # <blender> <file.blend> --background --python RenderScript.py

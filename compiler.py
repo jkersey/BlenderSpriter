@@ -20,6 +20,16 @@ from skins import skin_encoding, animation_encoding, \
     direction_encoding
 
 
+def ensure_output_dir(path):
+    """Create output directory or exit with helpful message on permission failure."""
+    try:
+        os.makedirs(path, exist_ok=True)
+    except PermissionError:
+        print(f"Error: Cannot create output directory: {path}")
+        print("Check that you have write permission to this location.")
+        sys.exit(1)
+
+
 class Compiler:
 
     def __init__(self, input_dir, output_dir, format='aseprite'):
@@ -47,6 +57,8 @@ class Compiler:
     def process_images(self):
 
         print("Processing images...")
+
+        ensure_output_dir(self.output_dir)
 
         files = self.get_image_list()
         self.splice_all_images(files)
