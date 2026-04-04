@@ -1,0 +1,24 @@
+[config]
+blender_file = ./models/character.blend
+ignore_actions = Action,ObAction,walkx
+
+[output]
+output_path = ./render
+use_antialiasing = True
+frame_step = 4
+
+[compiler]
+input_path = ./render
+output_path = ./compiled
+
+[directions]
+north = 2 * pi / 4
+south = 6 * pi / 4
+east = pi
+west = 0.0
+northwest = pi / 4
+southwest = 7 * pi / 4
+southeast = 5 * pi / 4
+northeast = 3 * pi / 4
+
+[unused]
