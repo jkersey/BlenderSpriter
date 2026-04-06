@@ -77,14 +77,23 @@ class RenderScript:
         self.target = self.objs.get('Armature')
 
         filename = bpy.path.display_name_from_filepath(bpy.context.blend_data.filepath)
-        if os.path.isfile(bpy.path.abspath("//") + "/" + filename + ".json"):
-            print("***** Config file exists")
-        else:
-            print("***** no config file exists")
+        json_path = bpy.path.abspath("//") + "/" + filename + ".json"
 
-        self.skins = [f for f in os.listdir(bpy.path.abspath("//")) if f.endswith(".png")]
-        print(bpy.path.abspath("//"))
-        print(self.skins)
+        if os.path.isfile(json_path):
+            with open(json_path) as f:
+                char_data = json.load(f)
+            self.characters = {
+                name: {'skin': info['skin'], 'actions': info['actions']}
+                for name, info in char_data.items()
+            }
+            print(f"***** Loaded character config: {list(self.characters.keys())}")
+        else:
+            skins = [f for f in os.listdir(bpy.path.abspath("//")) if f.endswith(".png")]
+            self.characters = {
+                f"{filename}_{skin.split('.')[0]}": {'skin': skin, 'actions': None}
+                for skin in skins
+            }
+            print(f"***** No character config, rendering all skins: {list(self.characters.keys())}")
 
     @property
     def grip(self):
@@ -183,9 +192,9 @@ class RenderScript:
 
         start_time = time.time()
         print(bpy.data.images.keys())
-        for skin in self.skins:
-            bpy.data.images["default.png"].filepath = "//" + skin
-            skin_name = skin.split(".")[0]
+        for char_name, char_info in self.characters.items():
+            bpy.data.images["default.png"].filepath = "//" + char_info['skin']
+            allowed_actions = char_info['actions']
 
             for station in self.stations:
                 self.log.append(":: Rendering " + station.name)
@@ -194,15 +203,19 @@ class RenderScript:
                 self.log.append(":: Actions: " + str(bpy.data.actions.keys()))
                 for action in bpy.data.actions.keys():
                     self.log.append(":: Rendering: " + action)
-                    self.render(action, station.name, skin_name)
+                    self.render(action, station.name, char_name, allowed_actions)
 
         end = time.time()
         return end - start_time
 
-    def render(self, action, station_name, skin_name):
+    def render(self, action, station_name, skin_name, allowed_actions=None):
 
         if action in self.ignore_actions:
             self.log.append("Ignoring " + action + " by rule in config.ini.")
+            return
+
+        if allowed_actions is not None and action not in allowed_actions:
+            self.log.append(f"Ignoring {action}: not in character config.")
             return
 
         if "." in action:
