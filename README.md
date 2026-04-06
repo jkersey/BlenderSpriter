@@ -124,5 +124,5 @@ python -m pytest tests/ -v
 
 If Spriter saves you time, consider supporting development:
 
-[![Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/YOUR_KOFI_USERNAME)
+[![Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/jimkersey)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/jkersey?style=social)](https://github.com/sponsors/jkersey)
