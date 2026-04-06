@@ -83,7 +83,7 @@ def test_save_aseprite_writes_json_file(tmp_path):
     c.store_aseprite('player', 'idle', 'north', 16, 0, 16, 16)
     c.save_aseprite()
 
-    out = tmp_path / 'player.json'
+    out = tmp_path / 'player.jssn'
     assert out.exists()
     data = json.loads(out.read_text())
     assert 'frames' in data
@@ -95,7 +95,7 @@ def test_save_aseprite_meta_image_matches_skin(tmp_path):
     c.store_aseprite('npc_default_yellow', 'idle', 'north', 0, 0, 16, 16)
     c.save_aseprite()
 
-    data = json.loads((tmp_path / 'npc_default_yellow.json').read_text())
+    data = json.loads((tmp_path / 'npc_default_yellow.jssn').read_text())
     assert data['meta']['image'] == 'npc_default_yellow.png'
 
 
@@ -106,7 +106,7 @@ def test_save_aseprite_closes_final_frametag(tmp_path):
     c.store_aseprite('player', 'walk', 'north', 32, 0, 16, 16)
     c.save_aseprite()
 
-    data = json.loads((tmp_path / 'player.json').read_text())
+    data = json.loads((tmp_path / 'player.jssn').read_text())
     tags = data['meta']['frameTags']
     assert len(tags) == 2
     assert tags[0] == {'name': 'idle_north', 'from': 0, 'to': 1, 'direction': 'forward'}
@@ -118,7 +118,7 @@ def test_save_aseprite_meta_fields(tmp_path):
     c.store_aseprite('player', 'idle', 'north', 0, 0, 16, 16)
     c.save_aseprite()
 
-    data = json.loads((tmp_path / 'player.json').read_text())
+    data = json.loads((tmp_path / 'player.jssn').read_text())
     meta = data['meta']
     assert meta['format'] == 'RGBA8888'
     assert meta['scale'] == '1'
@@ -142,8 +142,8 @@ def test_aseprite_produces_per_skin_png_and_json(tmp_path):
     Compiler(str(tmp_path / 'input'), str(out_dir), format='aseprite')
 
     assert (out_dir / 'player.png').exists()
-    assert (out_dir / 'player.json').exists()
+    assert (out_dir / 'player.jssn').exists()
 
-    data = json.loads((out_dir / 'player.json').read_text())
+    data = json.loads((out_dir / 'player.jssn').read_text())
     assert 'player_idle_north_0' in data['frames']
     assert data['meta']['image'] == 'player.png'

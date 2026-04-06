@@ -63,19 +63,16 @@ class Compiler:
         files = self.get_image_list()
         self.splice_all_images(files)
 
-        output_file = open(os.path.join(self.output_dir, "file.bin"), "wb")
-        output_file.write(binascii.unhexlify(self.meta_hex))
-        output_file.close()
+        with open(os.path.join(self.output_dir, "file.bin"), "wb") as output_file:
+            output_file.write(binascii.unhexlify(self.meta_hex))
 
-        csv_file = open(os.path.join(self.output_dir, "file.csv"), "w")
-        csv_file.write(self.meta_csv)
-        csv_file.close()
+        with open(os.path.join(self.output_dir, "file.csv"), "w") as csv_file:
+            csv_file.write(self.meta_csv)
 
         if self.format == 'json':
             self.save_sheet()
-            json_file = open(os.path.join(self.output_dir, "file.json"), "w")
-            json_file.write(json.dumps(self.meta_dict))
-            json_file.close()
+            with open(os.path.join(self.output_dir, "file.json"), "w") as json_file:
+                json_file.write(json.dumps(self.meta_dict))
         else:
             self.save_aseprite()
 
@@ -203,7 +200,7 @@ class Compiler:
                 },
             }
 
-            out_path = os.path.join(self.output_dir, f'{skin}.json')
+            out_path = os.path.join(self.output_dir, f'{skin}.jssn')
             with open(out_path, 'w') as f:
                 json.dump(aseprite_json, f, indent=2)
 
@@ -233,13 +230,21 @@ class Compiler:
 
         if "." in anim:
             return
-        
+
+        skin_id = skin_encoding.get(skin)
+        anim_id = animation_encoding.get(anim)
+        dir_id = direction_encoding.get(direction)
+
+        if skin_id is None or anim_id is None or dir_id is None:
+            print(f"WARNING: skipping unknown encoding for skin={skin!r} anim={anim!r} direction={direction!r}")
+            return
+
         print(f"{skin} {anim} {direction} {self.sheet_id}")
 
         output = ""
-        output += f'{skin_encoding.get(skin):0{2}X}'
-        output += f'{animation_encoding.get(anim):0{2}X}'
-        output += f'{direction_encoding.get(direction):0{2}X}'
+        output += f'{skin_id:0{2}X}'
+        output += f'{anim_id:0{2}X}'
+        output += f'{dir_id:0{2}X}'
         output += f'{self.sheet_id:0{2}X}'
 
         # Swapping AABB to BBAA, the engine wants it that way?
@@ -288,13 +293,12 @@ class Compiler:
         return images
 
     def put_image(self, image_path, x, y, width, height):
-        sprite = Image.open(image_path)
-        sprite.convert("RGBA")
-        sprite.resize((width, height), resample=Resampling.LANCZOS)
+        sprite = Image.open(image_path).convert("RGBA")
+        sprite = sprite.resize((width, height), resample=Resampling.LANCZOS)
         self.sheet.paste(im=sprite, box=(x, y), mask=sprite)
 
     def place_image(self, image, x, y):
-        image.convert("RGBA")
+        image = image.convert("RGBA")
         self.sheet.paste(im=image, box=(x, y), mask=image)
 
 

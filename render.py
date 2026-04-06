@@ -169,6 +169,9 @@ class RenderScript:
             # self.log.append("Path does not exist, creating...")
             os.makedirs(full_path)
 
+        for f in Path(full_path).glob('*.png'):
+            f.unlink()
+
         bpy.data.scenes[0].render.filepath = full_path + suffix
         bpy.ops.render.render(animation=True)
 
