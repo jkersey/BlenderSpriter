@@ -1,10 +1,10 @@
 {
     "main_guy": {
         "skin": "default.png",
-        "actions": ["run", "walk", "idle"]
+        "actions": ["run", "walk", "idle", "punch"]
     },
     "scientist": {
         "skin": "yellow.png",
-        "actions": ["run", "walk", "idle"]
+        "actions": ["run", "walk", "idle", "punch"]
     }
 }

@@ -32,9 +32,10 @@ def ensure_output_dir(path):
 
 class Compiler:
 
-    def __init__(self, input_dir, output_dir, format='aseprite'):
+    def __init__(self, input_dir, output_dir, format='aseprite', mode=None):
 
         self.format = format
+        self.mode = mode
         self.meta_hex = ""
         self.meta_csv = "id, skin, animation, direction, sheet id, x, y, w, h\n"
         self.meta_dict = {}
@@ -63,11 +64,12 @@ class Compiler:
         files = self.get_image_list()
         self.splice_all_images(files)
 
-        with open(os.path.join(self.output_dir, "file.bin"), "wb") as output_file:
-            output_file.write(binascii.unhexlify(self.meta_hex))
+        if self.mode != 'godot':
+            with open(os.path.join(self.output_dir, "file.bin"), "wb") as output_file:
+                output_file.write(binascii.unhexlify(self.meta_hex))
 
-        with open(os.path.join(self.output_dir, "file.csv"), "w") as csv_file:
-            csv_file.write(self.meta_csv)
+            with open(os.path.join(self.output_dir, "file.csv"), "w") as csv_file:
+                csv_file.write(self.meta_csv)
 
         if self.format == 'json':
             self.save_sheet()
@@ -132,8 +134,9 @@ class Compiler:
                 self.sheet.save(os.path.join(self.output_dir, f'{skin}.png'))
 
     def store_meta(self, skin, anim, direction, x, y, w, h):
-        self.store_csv(skin, anim, direction, x, y, w, h)
-        self.store_hex(skin, anim, direction, x, y, w, h)
+        if self.mode != 'godot':
+            self.store_csv(skin, anim, direction, x, y, w, h)
+            self.store_hex(skin, anim, direction, x, y, w, h)
         if self.format == 'json':
             self.store_dict(skin, anim, direction, x, y, w, h)
         else:
@@ -308,6 +311,7 @@ def main(argv):
 
     input_dir = config.get('compiler', 'input_path')
     output_dir = config.get('compiler', 'output_path')
+    mode = config.get('compiler', 'mode', fallback=None)
 
     fmt = 'aseprite'
     opts, _ = getopt.getopt(argv, 'f:', ['format='])
@@ -319,7 +323,7 @@ def main(argv):
         print(f"Error: unknown format '{fmt}'. Valid values: aseprite, json", file=sys.stderr)
         sys.exit(1)
 
-    Compiler(input_dir, output_dir, format=fmt)
+    Compiler(input_dir, output_dir, format=fmt, mode=mode)
 
 
 if __name__ == "__main__":

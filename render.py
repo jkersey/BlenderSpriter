@@ -1,4 +1,5 @@
 from pathlib import Path
+from contextlib import contextmanager
 
 import bpy
 import os
@@ -38,14 +39,25 @@ def load_config(config_path="config.ini"):
     config.read(config_path)
     return config
 
+
+@contextmanager
+def _suppress_stdout():
+    """Redirect C-level stdout to /dev/null to suppress Blender's render progress output."""
+    devnull = os.open(os.devnull, os.O_WRONLY)
+    saved = os.dup(1)
+    os.dup2(devnull, 1)
+    try:
+        yield
+    finally:
+        os.dup2(saved, 1)
+        os.close(saved)
+        os.close(devnull)
+
+
 # to run this:
 # <blender> <file.blend> --background --python RenderScript.py
 
 # expects to find an Armature object in the scene
-
-# TODO: Add the name of the empty to the name of the rendered file
-# TODO: Add a turnaround animation for the editor to use
-# TODO: how does the Blender logging system work? Can I reduce the log level?
 
 
 class RenderScript:
@@ -55,7 +67,7 @@ class RenderScript:
         self._grip = None
 
         config = ConfigParser()
-        config.read('config.ini')
+        config.read("config.ini")
 
         self.log = []
 
@@ -68,13 +80,13 @@ class RenderScript:
         # Locations within the file that have things to render
         self.stations = self.get_stations()
 
-        self.ignore_actions = config.get('config', 'ignore_actions').split(",")
+        self.ignore_actions = config.get("config", "ignore_actions").split(",")
 
-        self.directions = dict(config.items('directions'))
-        self.frame_step = int(config.get('output', 'frame_step'))
-        self.output_path = str(config.get('output', 'output_path'))
+        self.directions = dict(config.items("directions"))
+        self.frame_step = int(config.get("output", "frame_step"))
+        self.output_path = str(config.get("output", "output_path"))
 
-        self.target = self.objs.get('Armature')
+        self.target = self.objs.get("Armature")
 
         filename = bpy.path.display_name_from_filepath(bpy.context.blend_data.filepath)
         json_path = bpy.path.abspath("//") + "/" + filename + ".json"
@@ -83,17 +95,21 @@ class RenderScript:
             with open(json_path) as f:
                 char_data = json.load(f)
             self.characters = {
-                name: {'skin': info['skin'], 'actions': info['actions']}
+                name: {"skin": info["skin"], "actions": info["actions"]}
                 for name, info in char_data.items()
             }
             print(f"***** Loaded character config: {list(self.characters.keys())}")
         else:
-            skins = [f for f in os.listdir(bpy.path.abspath("//")) if f.endswith(".png")]
+            skins = [
+                f for f in os.listdir(bpy.path.abspath("//")) if f.endswith(".png")
+            ]
             self.characters = {
-                f"{filename}_{skin.split('.')[0]}": {'skin': skin, 'actions': None}
+                f"{filename}_{skin.split('.')[0]}": {"skin": skin, "actions": None}
                 for skin in skins
             }
-            print(f"***** No character config, rendering all skins: {list(self.characters.keys())}")
+            print(
+                f"***** No character config, rendering all skins: {list(self.characters.keys())}"
+            )
 
     @property
     def grip(self):
@@ -105,7 +121,7 @@ class RenderScript:
             self.parent_lamps(self._grip)
             self.parent_cameras(self._grip)
 
-            self._grip.rotation_mode = 'XYZ'
+            self._grip.rotation_mode = "XYZ"
 
         return self._grip
 
@@ -116,7 +132,7 @@ class RenderScript:
         return grip
 
     def parent_lamps(self, grip):
-        lamps = [x for x in self.objs if (x.type == 'LAMP')]
+        lamps = [x for x in self.objs if (x.type == "LAMP")]
 
         for lamp in lamps:
             print("Parenting a lamp.")
@@ -128,7 +144,7 @@ class RenderScript:
             lamp.parent = grip
 
     def parent_cameras(self, grip):
-        cameras = [x for x in self.objs if (x.type == 'CAMERA')]
+        cameras = [x for x in self.objs if (x.type == "CAMERA")]
         for camera in cameras:
             print("Parenting a camera")
             print("Type:" + str(camera.data.type))
@@ -140,7 +156,7 @@ class RenderScript:
     def get_stations(self):
 
         # Get all of the 'EMPTY' objects except for the Grip
-        stations = [x for x in self.objs if (x.type == 'EMPTY' and x.name != 'Grip')]
+        stations = [x for x in self.objs if (x.type == "EMPTY" and x.name != "Grip")]
 
         stations.sort(key=lambda x: x.name)
 
@@ -152,9 +168,15 @@ class RenderScript:
 
         return [self.grip] + stations
 
-    def render_position(self, action, direction, rotation, grip, output_path, station_name, skin_name):
+    def render_position(
+        self, action, direction, rotation, grip, output_path, station_name, skin_name
+    ):
 
-        filename = bpy.path.display_name_from_filepath(bpy.context.blend_data.filepath) + "_" + skin_name
+        filename = (
+            bpy.path.display_name_from_filepath(bpy.context.blend_data.filepath)
+            + "_"
+            + skin_name
+        )
 
         grip.rotation_euler[2] = rotation
 
@@ -165,12 +187,23 @@ class RenderScript:
 
         suffix = ""
 
-        if action == 'static':
+        if action == "static":
             full_path = output_path + os.sep + filename + os.sep
             suffix = str(self.file_increment).zfill(2)
             self.file_increment += 1
         else:
-            full_path = output_path + os.sep + filename + os.sep + loc_string + os.sep + action + os.sep + direction + os.sep
+            full_path = (
+                output_path
+                + os.sep
+                + filename
+                + os.sep
+                + loc_string
+                + os.sep
+                + action
+                + os.sep
+                + direction
+                + os.sep
+            )
 
         # self.log.append("Full path: " + full_path)
 
@@ -178,11 +211,15 @@ class RenderScript:
             # self.log.append("Path does not exist, creating...")
             os.makedirs(full_path)
 
-        for f in Path(full_path).glob('*.png'):
+        for f in Path(full_path).glob("*.png"):
             f.unlink()
 
         bpy.data.scenes[0].render.filepath = full_path + suffix
-        bpy.ops.render.render(animation=True)
+        frame_count = bpy.data.scenes[0].frame_end - bpy.data.scenes[0].frame_start + 1
+        print(f"  {skin_name} / {action} / {direction} ({frame_count} frames)...", end="", flush=True)
+        with _suppress_stdout():
+            bpy.ops.render.render(animation=True)
+        print(" done.", flush=True)
 
     def dump_log(self):
         for line in self.log:
@@ -193,8 +230,8 @@ class RenderScript:
         start_time = time.time()
         print(bpy.data.images.keys())
         for char_name, char_info in self.characters.items():
-            bpy.data.images["default.png"].filepath = "//" + char_info['skin']
-            allowed_actions = char_info['actions']
+            bpy.data.images["default.png"].filepath = "//" + char_info["skin"]
+            allowed_actions = char_info["actions"]
 
             for station in self.stations:
                 self.log.append(":: Rendering " + station.name)
@@ -219,14 +256,18 @@ class RenderScript:
             return
 
         if "." in action:
-            self.log.append("Ignoring " + action + " because it should've been deleted.")
+            self.log.append(
+                "Ignoring " + action + " because it should've been deleted."
+            )
             return
 
         start, finish = bpy.data.actions[action].frame_range
         if self.target:
             self.target.animation_data.action = bpy.data.actions[action]
         bpy.data.scenes[0].frame_start = int(start)
-        bpy.data.scenes[0].frame_end = int(finish) - 1  # finish frame should be dupe of start frame
+        bpy.data.scenes[0].frame_end = (
+            int(finish) - 1
+        )  # finish frame should be dupe of start frame
         bpy.data.scenes[0].frame_step = self.frame_step
 
         direction_overrides = station_name.split("_")[1:]
@@ -239,10 +280,18 @@ class RenderScript:
         self.log.append("Got : " + str(directions) + ".")
         for key in directions:
             self.log.append("Rendering " + key + ".")
-            self.render_position(action, key, eval(self.directions[key]), self.grip, self.output_path, station_name, skin_name)
+            self.render_position(
+                action,
+                key,
+                eval(self.directions[key]),
+                self.grip,
+                self.output_path,
+                station_name,
+                skin_name,
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     renderScript = RenderScript()
     elapsed = renderScript.main()
     renderScript.dump_log()

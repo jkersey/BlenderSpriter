@@ -10,6 +10,7 @@ frame_step = 4
 [compiler]
 input_path = ./render
 output_path = ./compiled
+# mode = godot  (set to 'godot' to output only .png and .jssn files, skipping file.bin and file.csv)
 
 [directions]
 north = 2 * pi / 4
